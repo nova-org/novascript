@@ -1,3 +1,4 @@
+#include <iostream>
 #include <fstream>
 #include <vector>
 
@@ -7,17 +8,27 @@ void lex(std::vector<char>);
 std::string getEnvVar(std::string const & key ) 
 {
     char * val = getenv( key.c_str() );
-    return val == NULL ? std::string("") : std::string(val);
+    return val == NULL ? "" : std::string(val);
 }
 
+bool endsWith(const std::string& s, const std::string& suffix)
+{
+    return s.rfind(suffix) == (s.size()-suffix.size());
+}
 
-int main() {
+int main(int argc, char *argv[]) {
+	std::string filename = argv[1];
+
+	if(!endsWith(filename, ".ns")) {
+		std::cout << "Only novascript files can be run\n";
+		return 1;
+	}
+
 	std::string debug = getEnvVar("DEBUG");
-	debug = debug == "" ? false : true;
-	std::ifstream file("test.ns");
+	std::ifstream file(filename);
 	std::vector<char> filecontents;
 	std::string contents;
-
+	
 	if(file.is_open()) {
 		while(getline(file, contents)) {
 			for(int i = 0; i < contents.length(); i++) {
