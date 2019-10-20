@@ -1,23 +1,22 @@
 #include <fstream>
 #include <vector>
-using namespace std;
 
-void lex(vector<char>);
+void lex(std::vector<char>);
 
 
-string getEnvVar(string const & key ) 
+std::string getEnvVar(std::string const & key ) 
 {
     char * val = getenv( key.c_str() );
-    return val == NULL ? string("") : string(val);
+    return val == NULL ? std::string("") : std::string(val);
 }
 
 
 int main(int argc, char *argv[]) {
-	string debug = getEnvVar("DEBUG");
+	std::string debug = getEnvVar("DEBUG");
 	debug = debug == "" ? false : true;
-	ifstream file("test.ns");
-	vector<char> filecontents;
-	string contents;
+	std::ifstream file("test.ns");
+	std::vector<char> filecontents;
+	std::string contents;
 
 	if(file.is_open()) {
 		while(getline(file, contents)) {
@@ -31,13 +30,13 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-void lex(vector<char> contents) {
+void lex(std::vector<char> contents) {
 	int i = 0;
-	vector<string> type = {"integer", "string"};
-	string token;
-	string str;
-	string var;
-	vector<string> toks;
+	std::vector<std::string> type = {"integer", "string"};
+	std::string token;
+	std::string str;
+	std::string var;
+	std::vector<std::string> toks;
 	int state = 0;
 	for(char content : contents) {
 		token += content;
@@ -77,7 +76,7 @@ void lex(vector<char> contents) {
 			state = 0;
 		} else if(state == 2) {
 
-			if(token.find(' ') != string::npos) {
+			if(token.find(' ') != std::string::npos) {
 
 				token = "";
 				if(i == 1) {
@@ -96,7 +95,7 @@ void lex(vector<char> contents) {
 
 		//printf("%s\n", token.c_str());
 	}
-	for(string tok : toks) {
+	for(std::string tok : toks) {
 		printf("%s\n", tok.c_str());
 	}
 }
