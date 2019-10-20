@@ -11,7 +11,7 @@ std::string getEnvVar(std::string const & key )
 }
 
 
-int main(int argc, char *argv[]) {
+int main() {
 	std::string debug = getEnvVar("DEBUG");
 	debug = debug == "" ? false : true;
 	std::ifstream file("test.ns");
