@@ -1,2 +1,2 @@
-print "hello"
+log "hello"
 set hello as "world"

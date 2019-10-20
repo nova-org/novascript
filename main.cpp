@@ -4,8 +4,17 @@ using namespace std;
 
 void lex(vector<char>);
 
-int main() {
 
+string getEnvVar(string const & key ) 
+{
+    char * val = getenv( key.c_str() );
+    return val == NULL ? string("") : string(val);
+}
+
+
+int main(int argc, char *argv[]) {
+	string debug = getEnvVar("DEBUG");
+	debug = debug == "" ? false : true;
 	ifstream file("test.ns");
 	vector<char> filecontents;
 	string contents;
@@ -39,8 +48,8 @@ void lex(vector<char> contents) {
 				token = "";
 			}
 		}
-		if(token == "print") {
-			toks.push_back("PRINT");
+		if(token == "log") {
+			toks.push_back("LOG");
 			token = "";
 		} else if(token == "\"") {
 			if(state == 0) {
