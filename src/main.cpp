@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-
 void lex(std::vector<char>);
 
 
@@ -24,7 +23,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	std::string debug = getEnvVar("DEBUG");
+	std::string debug = getEnvVar("NOVA_DEBUG");
 	std::ifstream file(filename);
 	std::vector<char> filecontents;
 	std::string contents;
@@ -56,6 +55,12 @@ void lex(std::vector<char> contents) {
 				continue;
 			} else if (state == 0) {
 				token = "";
+			} else if(state == 3) {
+				token = "";
+				state = 2;
+			} else if (state == 2) {
+				token = "";
+				state = 0;
 			}
 		}
 		if(token == "log") {
@@ -74,37 +79,24 @@ void lex(std::vector<char> contents) {
 			token = "";
 
 
-		}  else if(token == "set") {
-
-			state = 2;
-			token = "";
+		}   else if(token == "set") {
 			toks.push_back("DECLARATION");
+			token = "";
+			state = 3;
 		} else if(token == "as") {
 			toks.push_back(var);
 			toks.push_back("EQUALS");
 			var = "";
 			token = "";
-			state = 0;
 		} else if(state == 2) {
-
-			if(token.find(' ') != std::string::npos) {
-
-				token = "";
-				if(i == 1) {
-					state = 0;
-				}
-				i++;
-			} else {
-				var += token;
-				token = "";
-			}
-
+			var += token;
+			token = "";
 		} else if(state == 1) {
 			str += token;
 			token = "";
 		}
 
-		//printf("%s\n", token.c_str());
+
 	}
 	for(std::string tok : toks) {
 		printf("%s\n", tok.c_str());
